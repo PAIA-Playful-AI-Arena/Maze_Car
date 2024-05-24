@@ -3,4 +3,4 @@
 # if you install box2d-py with trouble , you could try to comment last line and uncomment next line
 mlgame==10.4.5.3
 
-Box2D==2.3.10
+Box2D==2.3.2
