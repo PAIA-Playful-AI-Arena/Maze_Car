@@ -1,4 +1,4 @@
-export tag=latest
+export tag="latest"
 export game="maze_car"
 
 docker run -it --rm --name ${game} \
@@ -8,4 +8,4 @@ docker run -it --rm --name ${game} \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -e DISPLAY=host.docker.internal:0 \
 ${game}:${tag} \
-sh -c "python -m mlgame -1 -f 30 -r /game/records -i /game/ai/1P/ml_play.py /game --level_file /game/var/map.dat"
+sh -c "python -m mlgame -1 -f 30 -r /game/records -i /game/ai/1P/ml_play.py /game --map 1"

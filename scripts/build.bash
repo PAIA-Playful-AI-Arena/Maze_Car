@@ -1,4 +1,4 @@
-export tag=latest
+export tag="latest"
 export game="maze_car"
 
 docker build \
