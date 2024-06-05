@@ -195,13 +195,13 @@ class MLPlay:
     "state": "FINISH", 
     "attachment": [
         {
-        "player": "2P", 
+        "player_num": "2P", 
         "rank": 1, 
         "used_frame": 107, 
         "check_points": 0
         }, 
         {
-        "player": "1P", 
+        "player_num": "1P", 
         "rank": 2, 
         "used_frame": 121, 
         "check_points": 0
