@@ -192,7 +192,7 @@ class MLPlay:
 ```json
 {
     "frame_used": 121, 
-    "state": "FINISH", 
+    "status": "FINISH", 
     "attachment": [
         {
         "player_num": "2P", 

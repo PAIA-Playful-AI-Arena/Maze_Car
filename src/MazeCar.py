@@ -284,7 +284,7 @@ class MazeCar(PaiaGame):
                 rank.append(same_rank)
 
         return {"frame_used": scene_info["frame"],
-                "state": self.game_mode.state,
+                "status": self.game_mode.state,
                 "attachment": rank,
                 }
 
