@@ -270,7 +270,7 @@ class MazeCar(PaiaGame):
                 #              "檢查點通過率": pass_percent,
                 #              "檢查點未通過率": remain_percent,
                 # }
-                same_rank = {"player": str(user.car_no + 1) + "P",
+                same_rank = {"player_num": str(user.car_no + 1) + "P",
                              "rank": self.game_mode.ranked_user.index(ranking) + 1,
                              "used_frame": user.end_frame,
                              "frame_limit": self.game_end_time,
@@ -280,6 +280,7 @@ class MazeCar(PaiaGame):
                              "remain_points": remain_point,
                              "pass_percent": pass_percent,
                              "remain_percent": remain_percent,
+                             # TODO score
                              }
                 rank.append(same_rank)
 
