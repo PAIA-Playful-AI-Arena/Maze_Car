@@ -46,7 +46,7 @@ class End_point(Point):
                       "y": self.rect.y,
                       "width": 60,
                       "height": 60,
-                      "image_id": "logo",
+                      "image_id": "endpoint",
                       "angle": 0}
         return asset_data
 
@@ -68,12 +68,19 @@ class Check_point(Point):
                 self.car_has_hit.append(hit)
 
     def get_progress_data(self):
-        asset_data = {"type": "rect",
+        # asset_data = {"type": "rect",
+        #               "x": self.rect.x,
+        #               "y": self.rect.y,
+        #               "width": 60,
+        #               "height": 60,
+        #               "color": RED,
+        #               "angle": 0}
+        asset_data = {"type": "image",
                       "x": self.rect.x,
                       "y": self.rect.y,
                       "width": 60,
                       "height": 60,
-                      "color": RED,
+                      "image_id": "checkpoint",
                       "angle": 0}
         return asset_data
 
