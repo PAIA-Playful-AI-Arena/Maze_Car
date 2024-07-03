@@ -18,7 +18,7 @@
 
 ## 啟動方式
 
-- 直接啟動 [main.py](https://github.com/yen900611/Maze_Car/blob/master/main.py) 即可執行
+- 直接啟動 [main.py](https://github.com/PAIA-Playful-AI-Arena/Maze_Car/blob/main/main.py) 即可執行
 
 ### 遊戲參數設定
 

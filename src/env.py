@@ -5,8 +5,8 @@ TARGET_FPS = 60
 TIME_STEP = 1.0 / TARGET_FPS
 
 '''width and height'''
-WIDTH = 860
-HEIGHT = 560
+WIDTH = 1000
+HEIGHT = 700
 TILE_WIDTH = 540  # 大小
 TILE_HEIGHT = 540
 
@@ -48,24 +48,28 @@ SOUND_DIR = path.join(path.dirname(__file__), '../asset/sound')
 
 '''image'''
 BG_IMG = "bg_img.png"
-BG_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/bg_img.png'
+BG_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/bg_img.png'
 
 INFO_NAME = "info.png"
-INFO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/info.png'
+INFO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/info.png'
 
 LOGO = "logo.png"
-LOGO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/logo.png'
+LOGO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/logo.png'
 
 TMF_LOGO = "TMFlogo.png"
-TMF_LOGO_URL = 'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/TMFlogo.png'
+TMF_LOGO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/TMFlogo.png'
+ENDPOINT_IMG = "endpoint.png"
+ENDPOINT_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/{ENDPOINT_IMG}'
+CHECKPOINT_IMG = "checkpoint.png"
+CHECKPOINT_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/{CHECKPOINT_IMG}'
 
 CARS_NAME = ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", ]
-CARS_URL = ['https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_01.png',
-            'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_02.png',
-            'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_03.png',
-            'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_04.png',
-            'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_05.png',
-            'https://raw.githubusercontent.com/yen900611/maze_car/master/asset/image/car_06.png'
+CARS_URL = ['https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_01.png',
+            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_02.png',
+            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_03.png',
+            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_04.png',
+            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_05.png',
+            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_06.png'
             ]
 
 '''map_file'''
