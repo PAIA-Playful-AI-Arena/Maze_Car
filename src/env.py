@@ -27,7 +27,7 @@ FPS = 30
 
 '''color'''
 BLACK = (0, 0, 0)
-WHITE = "#ffffff"
+WHITE = "#F5F5F5"
 RED = "#ff0000"
 YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)

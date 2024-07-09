@@ -5,7 +5,7 @@
 建立好的地圖除了可以直接放入[PAIA迷宮自走車](https://github.com/PAIA-Playful-AI-Arena/Maze_Car)，在個人環境中做使用之外，也可以分享給其他人，讓所有人使用。
 ---
 # 檔案更新
-[新版圖塊集](https://github.com/PAIA-Playful-AI-Arena/Maze_Car/blob/master/asset/tile.png?raw=true)
+[新版圖塊集](https://github.com/PAIA-Playful-AI-Arena/Maze_Car/blob/main/asset/tile.png?raw=true)
 1. 增加四種自走車初始方向
 2. 增加斜向靜止牆壁
 3. 說明如何處理新舊版本不相容問題

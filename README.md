@@ -7,7 +7,7 @@
 [![MLGame](https://img.shields.io/badge/MLGame->9.5.3.*-<COLOR>.svg)](https://github.com/PAIA-Playful-AI-Arena/MLGame)
 [![pygame](https://img.shields.io/badge/pygame-2.0.1-<COLOR>.svg)](https://github.com/pygame/pygame/releases/tag/2.0.1)
 
-在錯綜復雜的棋盤迷宮中，如何讓你的自走車突破重圍，走到出口，而不會迷失在其之中。本遊戲也提供多元的關卡，隨著遊戲難度提升，迷宮的牆壁可是會移動，考驗各位玩家如何再多變的環境下，依然能夠逃出迷宮。
+在錯綜復雜的棋盤迷宮中，想辦法讓你的AI自走車突破重圍，不會迷失在其之中，走到終點。本遊戲也提供多元的關卡，隨著遊戲難度提升，迷宮的牆壁可是會移動，考驗各位玩家如何在多變的環境下，依然能夠逃出迷宮。
 
 ![](https://i.imgur.com/uDn6Foi.gif)
 
