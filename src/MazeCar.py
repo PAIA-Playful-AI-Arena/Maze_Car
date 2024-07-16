@@ -4,7 +4,7 @@ from mlgame.game.paia_game import PaiaGame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
-    create_line_view_data, Scene, create_polygon_view_data
+    create_line_view_data, Scene, create_polygon_view_data, create_aapolygon_view_data
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
 from .practiceMode import PracticeMode
@@ -127,7 +127,8 @@ class MazeCar(PaiaGame):
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
+            game_info["background"].append(create_aapolygon_view_data("wall", vertices, "#FFFFFF"))
+            # game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
         for wall in self.game_mode.slant_walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]

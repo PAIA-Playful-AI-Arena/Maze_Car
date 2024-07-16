@@ -1,6 +1,6 @@
 from os import path
 
-PPM = 20.0  # pixels per meter
+PPM = 16  # pixels per meter
 TARGET_FPS = 60
 TIME_STEP = 1.0 / TARGET_FPS
 
@@ -11,8 +11,8 @@ TILE_WIDTH = 540  # 大小
 TILE_HEIGHT = 540
 
 '''tile-base'''
-TILESIZE = 20
-TILE_LEFTTOP = 20, 20  # pixel
+TILESIZE = 16
+TILE_LEFTTOP = 16, 16  # pixel
 GRIDWIDTH = (TILE_WIDTH + TILE_LEFTTOP[0]) / TILESIZE
 GRIDHEIGHT = (TILE_HEIGHT + TILE_LEFTTOP[1]) / TILESIZE
 
@@ -39,7 +39,7 @@ PINK = (255, 105, 180)
 MEDIUMPURPLE = (147, 112, 219)
 
 '''object size'''
-car_size = (60, 30)
+car_size = (50, 40)
 
 '''data path'''
 ASSET_IMAGE_DIR = path.join(path.dirname(__file__), "../asset/image")
