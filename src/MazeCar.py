@@ -182,34 +182,62 @@ class MazeCar(PaiaGame):
 
         # text
         game_progress["toggle"].append(
-            create_text_view_data(f"{self.frame_count:4d}", 750, 40, WHITE, font_style="40px Arial"))
-        game_progress["toggle"].append(create_text_view_data("frames", 765, 100, WHITE, font_style="20px Arial"))
+            create_text_view_data(f"{self.frame_count:4d}", 800, 40, WHITE, font_style="40px Arial"))
+        game_progress["toggle"].append(create_text_view_data("frames", 815, 100, WHITE, font_style="20px Arial"))
         # game_progress["toggle"].append(create_text_view_data("{0:05d} frames".format(self.frame_count), 750, 100, WHITE, font_style="36px Arial"))
         for car in self.game_mode.car_info:
-            y = 200
-            x = 800
+            y = 170
+            x = 845
+            # sensor_label = 'L'
             if car["is_running"]:
                 game_progress["toggle"].append(
-                    create_text_view_data("{:04.1f}".format(car["l_sensor_value"]["distance"]), x - 88,
-                                          y + 60 + 105 * (car["id"]), "#FFFF00",
-                                          "15px Arial"))
+                    create_text_view_data(f"{'L  ':<9}{car['l_sensor_value']['distance']:0>5.1f}cm",
+                                          x,
+                                          y + 130 * (car["id"]), "#FFFF00",
+                                          "15px Arial BOLD")
+                )
                 game_progress["toggle"].append(
-                    create_text_view_data("{:04.1f}".format(car["f_sensor_value"]["distance"]), x - 48,
-                                          y + 28 + 105 * (car["id"]), "#FF0000",
-                                          "15px Arial"))
+                    create_text_view_data(f"{'LF':<8}{car['l_sensor_value']['distance']:0>5.1f}cm",
+                                          x,
+                                          y+16 + 130 * (car["id"]), "#FFFF00",
+                                          "15px Arial BOLD")
+                )
                 game_progress["toggle"].append(
-                    create_text_view_data("{:04.1f}".format(car["r_sensor_value"]["distance"]), x,
-                                          y + 60 + 105 * (car["id"]), "#21A1F1",
-                                          "15px Arial"))
-                if car["r_t_sensor_value"]["distance"] != -1 and car["l_t_sensor_value"]["distance"] != -1:
-                    game_progress["toggle"].append(
-                        create_text_view_data("{:04.1f}".format(car["r_t_sensor_value"]["distance"]), x,
-                                              y + 30 + 105 * (car["id"]), "#21A1F1",
-                                              "15px Arial"))
-                    game_progress["toggle"].append(
-                        create_text_view_data("{:04.1f}".format(car["l_t_sensor_value"]["distance"]), x - 88,
-                                              y + 30 + 105 * (car["id"]), "#FFFF00",
-                                              "15px Arial"))
+                    create_text_view_data(f"{'F  ':<9}{car['f_sensor_value']['distance']:0>5.1f}cm",
+                                          x,
+                                          y + 32 + 130 * (car["id"]), "#FF0000",
+                                          "15px Arial BOLD")
+                )
+                game_progress["toggle"].append(
+                    create_text_view_data(f"{'R  ':<9}{car['r_sensor_value']['distance']:0>5.1f}cm",
+                                          x,
+                                          y + 48 + 130 * (car["id"]), "#21A1F1",
+                                          "15px Arial BOLD")
+                )
+                game_progress["toggle"].append(
+                    create_text_view_data(f"{'RF':<8}{car['r_t_sensor_value']['distance']:0>5.1f}cm",
+                                          x,
+                                          y + 64 + 130 * (car["id"]), "#21A1F1",
+                                          "15px Arial BOLD")
+                )
+                # game_progress["toggle"].append(
+                #     create_text_view_data("{:04.1f}".format(car["f_sensor_value"]["distance"]), x - 48,
+                #                           y + 28 + 105 * (car["id"]), "#FF0000",
+                #                           "15px Arial"))
+                # game_progress["toggle"].append(
+                #     create_text_view_data("{:04.1f}".format(car["r_sensor_value"]["distance"]), x,
+                #                           y + 60 + 105 * (car["id"]), "#21A1F1",
+                #                           "15px Arial"))
+                # # if car["r_t_sensor_value"]["distance"] != -1 and car["l_t_sensor_value"]["distance"] != -1:
+                # game_progress["toggle"].append(
+                #     create_text_view_data("{:04.1f}".format(car["r_t_sensor_value"]["distance"]), x,
+                #                           y + 30 + 105 * (car["id"]), "#21A1F1",
+                #                           "15px Arial"))
+                # game_progress["toggle"].append(
+                #     create_text_view_data("{:04.1f}".format(car["l_t_sensor_value"]["distance"]), x - 88,
+                #                           y + 30 + 105 * (car["id"]), "#FFFF00",
+                #                           "15px Arial"))
+
                 game_progress["object_list"].append(
                     create_line_view_data("l_sensor", car["center"][0], car["center"][1],
                                           self.trnsfer_box2d_to_pygame(car["l_sensor_value"]["coordinate"])[0],
