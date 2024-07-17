@@ -33,6 +33,7 @@ class Car(pygame.sprite.Sprite):
         self.sensor = Sensor(world, self.body, sensor_num, angle)
         self.body.angle = math.pi * angle
         self.check_point = 0
+        self.rank = 'x'
 
     def update(self, commands):
         self.image = pygame.transform.rotate(self.origin_image, (self.body.angle * 180 / math.pi) % 360)
@@ -96,3 +97,6 @@ class Car(pygame.sprite.Sprite):
                          "end_frame":self.end_frame,
                          }
         return self.car_info
+    @property
+    def score(self):
+        return self.check_point*10000-self.end_frame

@@ -1,5 +1,5 @@
 # 遊戲專案
-[Github Maze_Car](https://github.com/yen900611/Maze_Car)
+[Github Maze_Car](https://github.com/PAIA-Playful-AI-Arena/Maze_Car)
 
 ## 執行方式
 * 直接執行 預設是單人遊戲
@@ -26,7 +26,7 @@ python -m mlgame -i ml/ml_play_template.py ./ --map 1 --game_type MAZE --user_nu
 
 ### 撰寫玩遊戲的程式
 
-程式範例在 [`ml/ml_play_template.py`](https://github.com/yen900611/RacingCar/blob/master/ml/ml_play_template.py)。
+程式範例在 [`ml/ml_play_template.py`](https://github.com/PAIA-Playful-AI-Arena/RacingCar/blob/master/ml/ml_play_template.py)。
 
 
 ### 初始化參數
