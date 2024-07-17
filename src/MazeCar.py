@@ -182,40 +182,40 @@ class MazeCar(PaiaGame):
         # car
 
         # text
-        game_progress["toggle"].append(
+        game_progress["background"].append(
             create_text_view_data(f"{self.frame_count:4d}", 800, 40, WHITE, font_style="40px Arial"))
-        game_progress["toggle"].append(create_text_view_data("frames", 815, 100, WHITE, font_style="20px Arial"))
+        game_progress["background"].append(create_text_view_data("frames", 815, 100, WHITE, font_style="20px Arial"))
         # game_progress["toggle"].append(create_text_view_data("{0:05d} frames".format(self.frame_count), 750, 100, WHITE, font_style="36px Arial"))
         for car in self.game_mode.car_info:
             y = 170
             x = 845
             # sensor_label = 'L'
             if car["is_running"]:
-                game_progress["toggle"].append(
+                game_progress["background"].append(
                     create_text_view_data(f"{'L  ':<9}{car['l_sensor_value']['distance']:0>5.1f}cm",
                                           x,
                                           y + 130 * (car["id"]), "#FFFF00",
                                           "15px Arial BOLD")
                 )
-                game_progress["toggle"].append(
+                game_progress["background"].append(
                     create_text_view_data(f"{'LF':<8}{car['l_sensor_value']['distance']:0>5.1f}cm",
                                           x,
                                           y+16 + 130 * (car["id"]), "#FFFF00",
                                           "15px Arial BOLD")
                 )
-                game_progress["toggle"].append(
+                game_progress["background"].append(
                     create_text_view_data(f"{'F  ':<9}{car['f_sensor_value']['distance']:0>5.1f}cm",
                                           x,
                                           y + 32 + 130 * (car["id"]), "#FF0000",
                                           "15px Arial BOLD")
                 )
-                game_progress["toggle"].append(
+                game_progress["background"].append(
                     create_text_view_data(f"{'R  ':<9}{car['r_sensor_value']['distance']:0>5.1f}cm",
                                           x,
                                           y + 48 + 130 * (car["id"]), "#21A1F1",
                                           "15px Arial BOLD")
                 )
-                game_progress["toggle"].append(
+                game_progress["background"].append(
                     create_text_view_data(f"{'RF':<8}{car['r_t_sensor_value']['distance']:0>5.1f}cm",
                                           x,
                                           y + 64 + 130 * (car["id"]), "#21A1F1",
@@ -287,42 +287,42 @@ class MazeCar(PaiaGame):
         result = self.game_mode.result
         rank = []
         # TODO refactor
-        for ranking in self.game_mode.ranked_user:
-            for user in ranking:
-                if self.game_mode.check_point_num:
+        for user in self.game_mode.ranked_user:
+            if self.game_mode.check_point_num:
 
-                    pass_percent = round(user.check_point / self.game_mode.check_point_num, 5) * 100
-                    remain_point = self.game_mode.check_point_num - user.check_point
-                    remain_percent = 100 - pass_percent
-                else:
-                    pass_percent = 0
-                    remain_point = 0
-                    remain_percent = 0
-                # same_rank = {"玩家編號": str(user.car_no + 1) + "P",
-                #              "單局排名": self.game_mode.ranked_user.index(ranking) + 1,
-                #              "使用總幀數": user.end_frame,
-                #              "遊戲總幀數限制":self.game_end_time,
-                #              "使用時間百分比":round(user.end_frame/self.game_end_time,5)*100,
-                #              "檢查點總數量":self.game_mode.check_point_num,
-                #              "玩家通過檢查點數量": user.check_point,
-                #              "玩家未通過檢查點數量": remain_point,
-                #              "檢查點通過率": pass_percent,
-                #              "檢查點未通過率": remain_percent,
-                # }
-                same_rank = {
-                    "player_num": str(user.car_no + 1) + "P",
-                    "rank": self.game_mode.ranked_user.index(ranking) + 1,
-                    "used_frame": user.end_frame,
-                    "frame_limit": self.game_end_time,
-                    "frame_percent": round(user.end_frame / self.game_end_time * 100, 3),
-                    "total_checkpoints": self.game_mode.check_point_num,
-                    "check_points": user.check_point,
-                    "remain_points": remain_point,
-                    "pass_percent": pass_percent,
-                    "remain_percent": remain_percent,
-                    # TODO score
-                }
-                rank.append(same_rank)
+                pass_percent = round(user.check_point / self.game_mode.check_point_num, 5) * 100
+                remain_point = self.game_mode.check_point_num - user.check_point
+                remain_percent = 100 - pass_percent
+            else:
+                pass_percent = 0
+                remain_point = 0
+                remain_percent = 0
+            # same_rank = {"玩家編號": str(user.car_no + 1) + "P",
+            #              "單局排名": self.game_mode.ranked_user.index(ranking) + 1,
+            #              "使用總幀數": user.end_frame,
+            #              "遊戲總幀數限制":self.game_end_time,
+            #              "使用時間百分比":round(user.end_frame/self.game_end_time,5)*100,
+            #              "檢查點總數量":self.game_mode.check_point_num,
+            #              "玩家通過檢查點數量": user.check_point,
+            #              "玩家未通過檢查點數量": remain_point,
+            #              "檢查點通過率": pass_percent,
+            #              "檢查點未通過率": remain_percent,
+            # }
+            same_rank = {
+                "player_num": str(user.car_no + 1) + "P",
+                "rank": user.rank,
+                "used_frame": user.end_frame,
+                "frame_limit": self.game_end_time,
+                "frame_percent": round(user.end_frame / self.game_end_time * 100, 3),
+                "total_checkpoints": self.game_mode.check_point_num,
+                "check_points": user.check_point,
+                "remain_points": remain_point,
+                "pass_percent": pass_percent,
+                "remain_percent": remain_percent,
+                "score":user.score
+                # TODO score
+            }
+            rank.append(same_rank)
 
         return {"frame_used": scene_info["frame"],
                 "status": self.game_mode.state,

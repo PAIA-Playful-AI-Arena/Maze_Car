@@ -21,6 +21,8 @@ class GameMode(object):
         self.time_font = pygame.font.Font(pygame.font.match_font("arial", bold=True), 46)
         self.check_point_num = 0
         # self.start_time = time.time()
+        self.ranked_user = []  # pygame.sprite car
+
 
     def ticks(self, fps=FPS):
         """This method should be called once per frame.
@@ -69,54 +71,31 @@ class GameMode(object):
     def isRunning(self) -> bool:
         return self.running
 
-    def rank(self):
+    def rank(self)->list[Car]:
         completed_game_user = []
         unfinish_game_user = []
         user_end_frame = []
         user_check_point = []
         for car in self.eliminated_user:
             if car.is_completed:
-                user_end_frame.append(car.end_frame)
-                completed_game_user.append(car)
-            else:
-                user_check_point.append(car.check_point)
-                unfinish_game_user.append(car)
-        same_rank = []
-        rank_user = []  # [[sprite, sprite],[]]
+                # user_end_frame.append(car.end_frame)
+                # completed_game_user.append(car)
+                car.check_point = self.check_point_num
+        sorted_cars = sorted(self.eliminated_user, key=lambda x: x.score, reverse=True)
 
-        result = [user_end_frame.index(x) for x in sorted(user_end_frame)]
-        for i in range(len(result)):
-            if result[i] != result[i - 1] or i == 0:
-                if same_rank:
-                    rank_user.append(same_rank)
-                same_rank = []
-                same_rank.append(completed_game_user[result[i]])
-            else:
-                for user in completed_game_user:
-                    if user.end_frame == same_rank[0].end_frame and user not in same_rank:
-                        same_rank.append(user)
-                    else:
-                        pass
-        if same_rank:
-            rank_user.append(same_rank)
+        # Initialize rank and previous score
+        rank = 1
+        previous_score = None
+        self.ranked_user = []
+        # Iterate through sorted cars and assign ranks
+        for i, car in enumerate(sorted_cars):
+            if previous_score is None or car.score != previous_score:
+                rank = i + 1
+            car.rank = rank
+            previous_score = car.score
+            self.ranked_user.append(car)
 
-        same_rank = []
-        result = [user_check_point.index(x) for x in sorted(user_check_point, reverse=True)]
-        for i in range(len(result)):
-            if result[i] != result[i - 1] or i == 0:
-                if same_rank:
-                    rank_user.append(same_rank)
-                same_rank = []
-                same_rank.append(unfinish_game_user[result[i]])
-            else:
-                for user in unfinish_game_user:
-                    if user.check_point == same_rank[0].check_point and user not in same_rank:
-                        same_rank.append(user)
-                    else:
-                        pass
-        if same_rank:
-            rank_user.append(same_rank)
-        return rank_user
+        return self.ranked_user
 
     def trnsfer_box2d_to_pygame(self, coordinate):
         '''
@@ -251,9 +230,9 @@ class GameMode(object):
 
     def _print_result(self):
         if self.is_end and self.x == 0:
-            for rank in self.ranked_user:
-                for user in rank:
-                    self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
+            for user in self.ranked_user:
+
+                self.result.append(str(user.car_no + 1) + "P:" + str(user.end_frame) + "frame")
             self.x += 1
             print(self.result)
 
