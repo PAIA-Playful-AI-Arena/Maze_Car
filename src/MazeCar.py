@@ -4,7 +4,7 @@ from mlgame.game.paia_game import PaiaGame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
-    create_line_view_data, Scene, create_polygon_view_data, create_aapolygon_view_data
+    create_line_view_data, Scene, create_polygon_view_data
 from .mazeMode import MazeMode
 from .moveMazeMode import MoveMazeMode
 from .practiceMode import PracticeMode
@@ -102,21 +102,11 @@ class MazeCar(PaiaGame):
         info_path = path.join(ASSET_IMAGE_DIR, INFO_NAME)
         info_url = INFO_URL
         game_info["assets"].append(create_asset_init_data("info", 300, 700, info_path, info_url))
-        logo_path = path.join(ASSET_IMAGE_DIR, LOGO)
-        logo_url = LOGO_URL
-        game_info["assets"].append(create_asset_init_data("logo", 40, 40, logo_path, logo_url))
-        tmf_logo_path = path.join(ASSET_IMAGE_DIR, TMF_LOGO)
-        tmf_logo_url = TMF_LOGO_URL
-        game_info["assets"].append(create_asset_init_data("tmf_logo", 100, 40, tmf_logo_path, tmf_logo_url))
-        bg_path = path.join(ASSET_IMAGE_DIR, BG_IMG)
-        bg_url = BG_URL
-        game_info["assets"].append(create_asset_init_data("bg_img", 1000, 700, bg_path, bg_url))
+        game_info["assets"].append(create_asset_init_data("bg_img", 1000, 700, BG_PATH, BG_URL))
 
-        endpoint_path = path.join(ASSET_IMAGE_DIR, ENDPOINT_IMG)
-        checkpoint_path = path.join(ASSET_IMAGE_DIR, CHECKPOINT_IMG)
-
-        game_info["assets"].append(create_asset_init_data("endpoint", 60, 60, endpoint_path, ENDPOINT_URL))
-        game_info["assets"].append(create_asset_init_data("checkpoint", 60, 60, checkpoint_path, CHECKPOINT_URL))
+        game_info["assets"].append(create_asset_init_data("endpoint", 60, 60, ENDPOINT_PATH, ENDPOINT_URL))
+        game_info["assets"].append(create_asset_init_data("checkpoint", 60, 60, CHECKPOINT_PATH, CHECKPOINT_URL))
+        game_info["assets"].append(create_asset_init_data("checkpoint_2", 60, 60, CHECKPOINT2_PATH, CHECKPOINT_URL))
 
         for car in self.game_mode.car_info:
             file_path = path.join(ASSET_IMAGE_DIR, CARS_NAME[car["id"]])
@@ -127,13 +117,12 @@ class MazeCar(PaiaGame):
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            game_info["background"].append(create_aapolygon_view_data("wall", vertices, "#FFFFFF"))
+            game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
             # game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
         for wall in self.game_mode.slant_walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
             game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
-
 
         return game_info
 
@@ -158,11 +147,10 @@ class MazeCar(PaiaGame):
         #                                                                  240 - self.game_mode.car_info[0]["center"][1]]}
         # else:
         #     # 鏡頭固定在車子出生的位置
-    #     game_progress["game_sys_info"] = {"view_center_coordinate": [250 - self.origin_car_pos[0],
-    #                                                                  240 - self.origin_car_pos[1]]}
+        #     game_progress["game_sys_info"] = {"view_center_coordinate": [250 - self.origin_car_pos[0],
+        #                                                                  240 - self.origin_car_pos[1]]}
         for p in self.game_mode.all_points:
             game_progress["object_list"].append(p.get_progress_data())
-
 
         # end point
         game_progress["object_list"].append(self.game_mode.end_point.get_progress_data())
@@ -200,7 +188,7 @@ class MazeCar(PaiaGame):
                 game_progress["background"].append(
                     create_text_view_data(f"{'LF':<8}{car['l_sensor_value']['distance']:0>5.1f}cm",
                                           x,
-                                          y+16 + 130 * (car["id"]), "#FFFF00",
+                                          y + 16 + 130 * (car["id"]), "#FFFF00",
                                           "15px Arial BOLD")
                 )
                 game_progress["background"].append(
@@ -267,10 +255,11 @@ class MazeCar(PaiaGame):
                                           self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[1],
                                           "#FF0000", 3))
             else:
-                game_progress["toggle"].append(create_text_view_data("{0:05d} frames".format(car["end_frame"]),
-                                                                     x - 48, 178 + 30 + 105 * (car["id"] // 2),
+                game_progress["toggle"].append(create_text_view_data("{0:4d} frames".format(car["end_frame"]),
+                                                                     x,
+                                                                     y + 32 + 130 * (car["id"]),
                                                                      "#FFFFFF",
-                                                                     "16px Arial"))
+                                                                     "18px Arial BOLD"))
         for car in self.game_mode.car_info:
             game_progress["object_list"].append(
                 create_image_view_data("car_0" + str(car["id"] + 1), car["topleft"][0], car["topleft"][1], 50, 40,
@@ -319,7 +308,7 @@ class MazeCar(PaiaGame):
                 "remain_points": remain_point,
                 "pass_percent": pass_percent,
                 "remain_percent": remain_percent,
-                "score":user.score
+                "score": user.score
                 # TODO score
             }
             rank.append(same_rank)

@@ -11,7 +11,7 @@ class Car(pygame.sprite.Sprite):
         self.car_no = car_no  # From 0 to 5
         self.size =  (50, 40)  # car size
         self.is_completed = False
-        self.end_frame = 0
+        self.end_frame = -1
         self.origin_image = pygame.transform.scale(
             pygame.image.load(path.join(ASSET_IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),
             self.size)
@@ -85,6 +85,7 @@ class Car(pygame.sprite.Sprite):
                          "topleft": self.rect.topleft,  # pygame
                          "center":self.rect.center,
                          # "coordinate":(self.body.position[0]-1.145, self.body.position[1]+1.145),
+                         # TODO revise
                          "coordinate":(round((self.body.position[0]-1.145)*5, 2), round((self.body.position[1]+1.145) *5, 2)),
                          "angle": self.body.angle,  # Box2D
                          "r_sensor_value": self.sensor_R,
@@ -99,4 +100,4 @@ class Car(pygame.sprite.Sprite):
         return self.car_info
     @property
     def score(self):
-        return self.check_point*10000-self.end_frame
+        return self.check_point*1000-self.end_frame
