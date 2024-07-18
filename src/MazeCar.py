@@ -30,7 +30,7 @@ class MazeCar(PaiaGame):
         self.is_running = self.isRunning()
         self.map_width = self.game_mode.map.width
         self.map_height = self.game_mode.map.height
-        self.scene = Scene(WIDTH, HEIGHT, "#1E67D5")
+        self.scene = Scene(WIDTH, HEIGHT, BG_COLOR)
         self.origin_car_pos = [0, 0]
 
     # self.origin_car_pos = self.game_mode.car_info[0]["center"]

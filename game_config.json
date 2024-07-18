@@ -8,7 +8,7 @@
     "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/maze_car/main/asset/logo.png"
   ],
   "user_num": {
-    "min": 1,"max": 6
+    "min": 1,"max": 4
   },
   "game_params": [
     {
@@ -23,10 +23,6 @@
         {
           "verbose": "移動迷宮",
           "value": "MOVE_MAZE"
-        },
-        {
-          "verbose": "小試身手",
-          "value": "PRACTICE"
         }
       ],
       "help": "choose the type of game",
@@ -73,5 +69,6 @@
       "help": "'on' can turn on the sound.",
       "default": "on"
     }
+
   ]
 }
