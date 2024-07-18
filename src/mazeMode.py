@@ -13,12 +13,13 @@ from .tilemap import Map
 
 
 class MazeMode(GameMode):
-    def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
+    def __init__(self, user_num: int, map_file, time, sensor, sound_controller):
         super(MazeMode, self).__init__()
         '''load map data'''
         self.user_num = user_num
-        self.maze_id = maze_no - 1
-        self.map_file = "normal_map_" + str(maze_no) + ".json"
+        # self.maze_id = maze_no - 1
+        # self.map_file = "normal_map_" + str(maze_no) + ".json"
+        self.map_file = map_file
         self.load_data()
 
         '''group of sprites'''
@@ -119,13 +120,14 @@ class MazeMode(GameMode):
             pass
 
     def load_data(self):
-        map_folder = path.join(path.dirname(__file__), "map")
+
         try:
-            self.map = Map(path.join(map_folder, self.map_file))
+            self.map = Map(self.map_file)
         except Exception:
             print(f"File '{self.map_file}' is not found.We will load first map for you.")
-            self.map_file = "normal_map_1.json"
-            self.map = Map(path.join(map_folder, self.map_file))
+            self.map_file = path.join(MAP_FOLDER, "map_1.json")
+            # self.map_file = "normal_map_1.json"
+            self.map = Map(self.map_file)
 
     def _init_world(self, user_no: int):
         for i in range(user_no):

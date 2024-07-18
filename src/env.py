@@ -85,3 +85,4 @@ NORMAL_MAZE_MAPS = ["normal_map_1.json", "normal_map_2.json", "normal_map_3.json
 MOVE_MAZE_MAPS = ["move_map_1.json", "move_map_2.json", "move_map_3.json", "move_map_4.json", "move_map_4.json",
                   "move_map_4.json"]
 BG_COLOR = "#8493B1"
+MAP_FOLDER = path.join(path.dirname(__file__), "map")

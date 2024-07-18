@@ -32,11 +32,11 @@
         {
          "columns":9,
          "firstgid":1,
-         "image":"C:\/Users\/User\/PycharmProjects\/MLGame-full\/games\/maze_car\/asset\/tile.png",
+         "image":"..\/..\/asset\/tile.png",
          "imageheight":64,
          "imagewidth":576,
          "margin":0,
-         "name":"image20",
+         "name":"\u8ff7\u5bae\u7d20\u6750",
          "spacing":0,
          "tilecount":9,
          "tileheight":64,

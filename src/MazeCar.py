@@ -4,28 +4,33 @@ from mlgame.game.paia_game import PaiaGame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
-    create_line_view_data, Scene, create_polygon_view_data
+    create_line_view_data, Scene, create_polygon_view_data, create_aapolygon_view_data
 from .mazeMode import MazeMode
-from .moveMazeMode import MoveMazeMode
-from .practiceMode import PracticeMode
 from .sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
 
 class MazeCar(PaiaGame):
-    def __init__(self, user_num, game_type, map, time_to_play, sensor_num, sound, *args, **kwargs):
+    def __init__(self, user_num, map_num, time_to_play, sound, map_file=None, *args, **kwargs):
         super().__init__(user_num=user_num)
-        self.game_type = game_type
+        # self.game_type = game_type
         self.user_num = user_num
         self.is_single = False
         if self.user_num == 1:
             self.is_single = True
-        self.maze_id = map - 1
+        # self.maze_id = map_num - 1
         self.game_end_time = time_to_play
-        self.sensor_num = sensor_num
+        # self.sensor_num = sensor_num
+        self.sensor_num = 5
+
         self.is_sound = sound
-        self.set_game_mode()
+        if map_file is None:
+            map_file = path.join(MAP_FOLDER, f"map_{map_num}.json")
+        self.map_file = map_file
+        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num,
+                                  self.is_sound)
+
         self.game_mode.sound_controller.play_music()
         self.is_running = self.isRunning()
         self.map_width = self.game_mode.map.width
@@ -70,7 +75,8 @@ class MazeCar(PaiaGame):
 
     def reset(self):
         self.frame_count = 0
-        self.set_game_mode()
+        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num,
+                                  self.is_sound)
         self.game_mode.sound_controller.play_music()
 
     def isRunning(self):
@@ -117,12 +123,12 @@ class MazeCar(PaiaGame):
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
+            game_info["background"].append(create_aapolygon_view_data("wall", vertices, "#FFFFFF"))
             # game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
-        for wall in self.game_mode.slant_walls:
-            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
+        # for wall in self.game_mode.slant_walls:
+        #     vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+        #     vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+        #     game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
 
         return game_info
 
@@ -259,12 +265,21 @@ class MazeCar(PaiaGame):
                                                                      x,
                                                                      y + 32 + 130 * (car["id"]),
                                                                      "#FFFFFF",
-                                                                     "18px Arial BOLD"))
+                                                                             "18px Arial BOLD"))
         for car in self.game_mode.car_info:
             game_progress["object_list"].append(
                 create_image_view_data("car_0" + str(car["id"] + 1), car["topleft"][0], car["topleft"][1], 50, 40,
                                        car["angle"])
             )
+            game_progress["toggle"].append(
+                create_text_view_data(f"({car['coordinate'][0]},{car['coordinate'][1]})",
+                car["topleft"][0], car["topleft"][1]-40, "#FF0000",
+                                      "15px Arial"))
+            """
+            "x": car["coordinate"][0],
+            "y": car["coordinate"][1],
+            "angle": (car["angle"] * 180 / math.pi) % 360,
+            """
         return game_progress
 
     @check_game_result
@@ -369,20 +384,19 @@ class MazeCar(PaiaGame):
                 "5P": cmd_5P,
                 "6P": cmd_6P}
 
-    def set_game_mode(self):
-        if self.game_type == "MAZE":
-            self.game_mode = MazeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-                                      self.is_sound)
-            self.game_type = "MAZE"
-        elif self.game_type == "MOVE_MAZE":
-            self.game_mode = MoveMazeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-                                          self.is_sound)
-            self.game_type = "MOVE_MAZE"
-
-        elif self.game_type == "PRACTICE":
-            self.game_mode = PracticeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-                                          self.is_sound)
-            self.game_type = "PRACTICE"
+    # def set_game_mode(self):
+    #     if self.game_type == "MAZE":
+    #
+    #         self.game_type = "MAZE"
+    #     elif self.game_type == "MOVE_MAZE":
+    #         self.game_mode = MoveMazeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
+    #                                       self.is_sound)
+    #         self.game_type = "MOVE_MAZE"
+    #
+    #     elif self.game_type == "PRACTICE":
+    #         self.game_mode = PracticeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
+    #                                       self.is_sound)
+    #         self.game_type = "PRACTICE"
 
     def trnsfer_box2d_to_pygame(self, coordinate):
         '''
