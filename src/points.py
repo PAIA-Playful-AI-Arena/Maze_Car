@@ -51,7 +51,11 @@ class End_point(Point):
 
                 hit.is_completed = True
                 self.game.eliminated_user.append(hit)  # TODO #外部注入
-                self.game.state = GameResultState.FINISH
+                if len(self.game.cars)==1:
+                    self.game.state = GameResultState.PASSED
+                else:
+                    self.game.state = GameResultState.FINISH
+
                 hit.is_running = False
                 hit.status = GameStatus.GAME_PASS
 

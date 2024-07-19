@@ -4,7 +4,7 @@ from mlgame.game.paia_game import PaiaGame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
-    create_line_view_data, Scene, create_polygon_view_data, create_aapolygon_view_data, create_rect_view_data
+    create_line_view_data, Scene, create_polygon_view_data, create_rect_view_data
 from .mazeMode import MazeMode
 from .points import Check_point
 from .sound_controller import *
@@ -143,41 +143,42 @@ class MazeCar(PaiaGame):
 
         game_info["background"].append(
             create_text_view_data(f"(0,0)",
-                                  p0[0], p0[1]-12, "#0000FF",
+                                  p0[0], p0[1] - 12, HELP_TXT_COLOR,
                                   "12px Arial BOLD"))
         game_info["background"].append(
             create_rect_view_data(f"P0",
-                                  p0[0],p0[1], 2,2,"#0000FF"))
+                                  p0[0], p0[1], 2, 2, HELP_TXT_COLOR))
 
         game_info["background"].append(
             create_text_view_data(f"(200,0)",
-                                  p1[0]-16, p1[1]-12, "#0000FF",
+                                  p1[0] - 16, p1[1] - 12, HELP_TXT_COLOR,
                                   "12px Arial BOLD"))
         game_info["background"].append(
             create_rect_view_data(f"P1",
-                                  p1[0],p1[1], 2,2,"#0000FF"))
+                                  p1[0], p1[1], 2, 2, HELP_TXT_COLOR))
 
         game_info["background"].append(
             create_text_view_data(f"(200,-200)",
-                                  p2[0]-16, p2[1]+12, "#0000FF",
+                                  p2[0] - 16, p2[1] + 12, HELP_TXT_COLOR,
                                   "12px Arial BOLD"))
         game_info["background"].append(
             create_rect_view_data(f"P2",
-                                  p2[0],p2[1], 2,2,"#0000FF"))
+                                  p2[0], p2[1], 2, 2, HELP_TXT_COLOR))
 
         game_info["background"].append(
             create_text_view_data(f"(0,-200)",
-                                  p3[0], p3[1]+12, "#0000FF",
+                                  p3[0], p3[1] + 12, HELP_TXT_COLOR,
                                   "12px Arial BOLD"))
         game_info["background"].append(
             create_rect_view_data(f"P3",
-                                  p3[0],p3[1], 2,2,"#0000FF"))
+                                  p3[0], p3[1], 2, 2, HELP_TXT_COLOR))
 
         for p in self.game_mode.all_points:
             point_data = p.get_progress_data()
             game_info["background"].append(point_data)
             game_info["background"].append(create_text_view_data(f"({p.get_info()['coordinate'][0]},{p.get_info()['coordinate'][1]})",
-                                  point_data['x'] - 12, point_data['y'] + 50, "#FFFFFF",
+                                                                 point_data['x'] - 12, point_data['y'] + 50,
+                                                                 HELP_TXT_COLOR,
                                   "12px Arial BOLD"))
         return game_info
 
@@ -343,7 +344,6 @@ class MazeCar(PaiaGame):
         scene_info = self.get_scene_info
         result = self.game_mode.result
         rank = []
-        # TODO refactor
         for user in self.game_mode.ranked_user:
             if self.game_mode.check_point_num:
 
@@ -377,7 +377,6 @@ class MazeCar(PaiaGame):
                 "pass_percent": pass_percent,
                 "remain_percent": remain_percent,
                 "score": user.score
-                # TODO score
             }
             rank.append(same_rank)
 
