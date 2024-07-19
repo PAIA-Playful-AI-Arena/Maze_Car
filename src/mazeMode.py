@@ -87,8 +87,8 @@ class MazeMode(GameMode):
             car.detect_distance(self.frame, self.wall_info)
 
         self.all_points.update()
-        for point in self.all_points:
-            point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x, point.y))
+        # for point in self.all_points:
+        #     point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x, point.y))
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()

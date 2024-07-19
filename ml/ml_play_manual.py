@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import pygame
 
 
@@ -14,6 +16,7 @@ class MLPlay:
         """
         Generate the command according to the received scene information
         """
+        pprint(scene_info)
         if scene_info["status"] != "GAME_ALIVE":
             return "RESET"
         if pygame.K_w in keyboard or pygame.K_UP in keyboard:

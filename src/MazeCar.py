@@ -4,8 +4,9 @@ from mlgame.game.paia_game import PaiaGame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
-    create_line_view_data, Scene, create_polygon_view_data, create_aapolygon_view_data
+    create_line_view_data, Scene, create_polygon_view_data, create_aapolygon_view_data, create_rect_view_data
 from .mazeMode import MazeMode
+from .points import Check_point
 from .sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
@@ -117,19 +118,67 @@ class MazeCar(PaiaGame):
         for car in self.game_mode.car_info:
             file_path = path.join(ASSET_IMAGE_DIR, CARS_NAME[car["id"]])
             url = CARS_URL[car["id"]]
-            car_init_info = create_asset_init_data("car_0" + str(car["id"] + 1), 50, 50, file_path, url)
+            car_init_info = create_asset_init_data("car_0" + str(car["id"] + 1), 50, 40, file_path, url)
             game_info["assets"].append(car_init_info)
 
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            game_info["background"].append(create_aapolygon_view_data("wall", vertices, "#FFFFFF"))
-            # game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
-        # for wall in self.game_mode.slant_walls:
-        #     vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
-        #     vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-        #     game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
+            # game_info["background"].append(create_aapolygon_view_data("wall", vertices, "#FFFFFF"))
+            game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
+            # game_info["background"].append(
+            #     create_text_view_data(f"({vertices[0][0]},{vertices[0][1]})",
+            #                           vertices[0][0]-32, vertices[0][1], "#0000FF",
+            #                           "12px Arial BOLD"))
+        for wall in self.game_mode.slant_walls:
+            vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
+            vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
+            game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
 
+        # add coordinate p0 p1 p2 p3
+        p0 = (16,16)
+        p1 = (656,16)
+        p2 = (656,656)
+        p3 = (16,656)
+
+        game_info["background"].append(
+            create_text_view_data(f"(0,0)",
+                                  p0[0], p0[1]-12, "#0000FF",
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P0",
+                                  p0[0],p0[1], 2,2,"#0000FF"))
+
+        game_info["background"].append(
+            create_text_view_data(f"(200,0)",
+                                  p1[0]-16, p1[1]-12, "#0000FF",
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P1",
+                                  p1[0],p1[1], 2,2,"#0000FF"))
+
+        game_info["background"].append(
+            create_text_view_data(f"(200,-200)",
+                                  p2[0]-16, p2[1]+12, "#0000FF",
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P2",
+                                  p2[0],p2[1], 2,2,"#0000FF"))
+
+        game_info["background"].append(
+            create_text_view_data(f"(0,-200)",
+                                  p3[0], p3[1]+12, "#0000FF",
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P3",
+                                  p3[0],p3[1], 2,2,"#0000FF"))
+
+        for p in self.game_mode.all_points:
+            point_data = p.get_progress_data()
+            game_info["background"].append(point_data)
+            game_info["background"].append(create_text_view_data(f"({p.get_info()['coordinate'][0]},{p.get_info()['coordinate'][1]})",
+                                  point_data['x'] - 12, point_data['y'] + 50, "#FFFFFF",
+                                  "12px Arial BOLD"))
         return game_info
 
     @check_game_progress
@@ -156,7 +205,10 @@ class MazeCar(PaiaGame):
         #     game_progress["game_sys_info"] = {"view_center_coordinate": [250 - self.origin_car_pos[0],
         #                                                                  240 - self.origin_car_pos[1]]}
         for p in self.game_mode.all_points:
-            game_progress["object_list"].append(p.get_progress_data())
+            if isinstance(p,Check_point):
+                point_data = p.get_progress_data()
+                game_progress["object_list"].append(point_data)
+
 
         # end point
         game_progress["object_list"].append(self.game_mode.end_point.get_progress_data())
@@ -261,20 +313,21 @@ class MazeCar(PaiaGame):
                                           self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[1],
                                           "#FF0000", 3))
             else:
-                game_progress["toggle"].append(create_text_view_data("{0:4d} frames".format(car["end_frame"]),
+                game_progress["object_list"].append(create_text_view_data("{0:4d} frames".format(car["end_frame"]),
                                                                      x,
                                                                      y + 32 + 130 * (car["id"]),
                                                                      "#FFFFFF",
                                                                              "18px Arial BOLD"))
         for car in self.game_mode.car_info:
             game_progress["object_list"].append(
-                create_image_view_data("car_0" + str(car["id"] + 1), car["topleft"][0], car["topleft"][1], 50, 40,
+                create_image_view_data("car_0" + str(car["id"] + 1), car["topleft"][0], car["topleft"][1],
+                                       car['size'][0], car['size'][1],
                                        car["angle"])
             )
             game_progress["toggle"].append(
                 create_text_view_data(f"({car['coordinate'][0]},{car['coordinate'][1]})",
-                car["topleft"][0], car["topleft"][1]-40, "#FF0000",
-                                      "15px Arial"))
+                car["topleft"][0]-30, car["topleft"][1]+30, "#FFFFFF",
+                                      "18px Arial BOLD"))
             """
             "x": car["coordinate"][0],
             "y": car["coordinate"][1],

@@ -24,10 +24,20 @@ class Point(pygame.sprite.Sprite):
         return asset_data
 
 
+def trnsfer_box2d_to_pygame(coordinate):
+    '''
+    :param coordinate: vertice of body of box2d object
+    :return: center of pygame rect
+    '''
+    return ((coordinate[0]) * PPM, (0 - coordinate[1]) * PPM)
+
+
 class End_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 3, TILESIZE * 3)
+        self.size = TILESIZE * 3
+        self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
+        self.rect.x, self.rect.y = trnsfer_box2d_to_pygame((self.x, self.y))
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
@@ -49,8 +59,8 @@ class End_point(Point):
         asset_data = {"type": "image",
                       "x": self.rect.x,
                       "y": self.rect.y,
-                      "width": 60,
-                      "height": 60,
+                      "width": self.size,
+                      "height": self.size,
                       "image_id": "endpoint",
                       "angle": 0}
         return asset_data
@@ -60,7 +70,10 @@ class Check_point(Point):
 
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 3, TILESIZE * 3)
+        self.size = TILESIZE * 3
+        self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
+        self.rect.x, self.rect.y = trnsfer_box2d_to_pygame((self.x, self.y))
+
         self.car_has_hit = []
         self._touched = False
         self._game = game
@@ -92,8 +105,8 @@ class Check_point(Point):
         asset_data = {"type": "image",
                       "x": self.rect.x,
                       "y": self.rect.y,
-                      "width": 60,
-                      "height": 60,
+                      "width": self.size,
+                      "height": self.size,
                       "image_id": self._image_id(self._touched),
                       "angle": 0}
         return asset_data
