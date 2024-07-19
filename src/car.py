@@ -5,13 +5,16 @@ from .sensor import Sensor
 import pygame
 from .env import *
 
+
 class Car(pygame.sprite.Sprite):
     def __init__(self, world, coordinate: tuple, car_no: int, sensor_num, angle: int):
         pygame.sprite.Sprite.__init__(self)
         self.car_no = car_no  # From 0 to 5
-        self.size =  (50, 40)  # car size
+        # self.size =  (50, 40)  # car size
+        self.size = (TILESIZE * 2.5, TILESIZE * 2)  # car size
+
         self.is_completed = False
-        self.end_frame = 0
+        self.end_frame = -1
         self.origin_image = pygame.transform.scale(
             pygame.image.load(path.join(ASSET_IMAGE_DIR, "car_0" + str(self.car_no + 1) + ".png")),
             self.size)
@@ -19,11 +22,11 @@ class Car(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.is_running = True
         self.status = "GAME_ALIVE"
-        self.sensor_R = {"coordinate":(0, 0), "distance":-1}
-        self.sensor_L = {"coordinate":(0, 0), "distance":-1}
-        self.sensor_R_T = {"coordinate":(0, 0), "distance":-1}
-        self.sensor_L_T = {"coordinate":(0, 0), "distance":-1}
-        self.sensor_F = {"coordinate":(0, 0), "distance":-1}
+        self.sensor_R = {"coordinate": (0, 0), "distance": -1}
+        self.sensor_L = {"coordinate": (0, 0), "distance": -1}
+        self.sensor_R_T = {"coordinate": (0, 0), "distance": -1}
+        self.sensor_L_T = {"coordinate": (0, 0), "distance": -1}
+        self.sensor_F = {"coordinate": (0, 0), "distance": -1}
         self.L_PWM = 0
         self.R_PWM = 0
         self.rect.center = (0, 0)  # pygame
@@ -65,27 +68,28 @@ class Car(pygame.sprite.Sprite):
         self.sensor_F = sensor_value["front_value"]
 
     def left_move(self, pwm: int):
-        if pwm <0:
+        if pwm < 0:
             self.sensor.sensor_left.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
         else:
-            self.sensor.sensor_left.linearVelocity = self.body.GetWorldVector(localVector = (0,pwm**0.5))
+            self.sensor.sensor_left.linearVelocity = self.body.GetWorldVector(localVector=(0, pwm ** 0.5))
 
     def right_move(self, pwm: int):
-        if pwm <0:
+        if pwm < 0:
             self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector=(0, -(abs(pwm) ** 0.5)))
         else:
-            self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector = (0,pwm**0.5))
-
+            self.sensor.sensor_right.linearVelocity = self.body.GetWorldVector(localVector=(0, pwm ** 0.5))
 
     def get_info(self):
         self.car_info = {"id": self.car_no,
-                         "status":self.status,
-                         "is_running":self.is_running,
+                         "status": self.status,
+                         "is_running": self.is_running,
                          "size": self.size,  # pygame
                          "topleft": self.rect.topleft,  # pygame
-                         "center":self.rect.center,
+                         "center": self.rect.center,
                          # "coordinate":(self.body.position[0]-1.145, self.body.position[1]+1.145),
-                         "coordinate":(round((self.body.position[0]-1.145)*5, 2), round((self.body.position[1]+1.145) *5, 2)),
+                         # TODO revise
+                         "coordinate": (
+                         round((self.body.position[0] - 1.145) * 5, 2), round((self.body.position[1] + 1.145) * 5, 2)),
                          "angle": self.body.angle,  # Box2D
                          "r_sensor_value": self.sensor_R,
                          "l_sensor_value": self.sensor_L,
@@ -93,10 +97,11 @@ class Car(pygame.sprite.Sprite):
                          "l_t_sensor_value": self.sensor_L_T,
                          "f_sensor_value": self.sensor_F,
                          "L_PWM": self.L_PWM,
-                         "R_PWM":self.R_PWM,
-                         "end_frame":self.end_frame,
+                         "R_PWM": self.R_PWM,
+                         "end_frame": self.end_frame,
                          }
         return self.car_info
+
     @property
     def score(self):
-        return self.check_point*10000-self.end_frame
+        return self.check_point * 1000 - self.end_frame

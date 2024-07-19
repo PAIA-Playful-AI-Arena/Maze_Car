@@ -13,12 +13,13 @@ from .tilemap import Map
 
 
 class MazeMode(GameMode):
-    def __init__(self, user_num: int, maze_no, time, sensor, sound_controller):
+    def __init__(self, user_num: int, map_file, time, sensor, sound_controller):
         super(MazeMode, self).__init__()
         '''load map data'''
         self.user_num = user_num
-        self.maze_id = maze_no - 1
-        self.map_file = "normal_map_" + str(maze_no) + ".json"
+        # self.maze_id = maze_no - 1
+        # self.map_file = "normal_map_" + str(maze_no) + ".json"
+        self.map_file = map_file
         self.load_data()
 
         '''group of sprites'''
@@ -86,8 +87,8 @@ class MazeMode(GameMode):
             car.detect_distance(self.frame, self.wall_info)
 
         self.all_points.update()
-        for point in self.all_points:
-            point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x, point.y))
+        # for point in self.all_points:
+        #     point.rect.x, point.rect.y = self.trnsfer_box2d_to_pygame((point.x, point.y))
         for world in self.worlds:
             world.Step(TIME_STEP, 10, 10)
             world.ClearForces()
@@ -119,13 +120,14 @@ class MazeMode(GameMode):
             pass
 
     def load_data(self):
-        map_folder = path.join(path.dirname(__file__), "map")
+
         try:
-            self.map = Map(path.join(map_folder, self.map_file))
+            self.map = Map(self.map_file)
         except Exception:
             print(f"File '{self.map_file}' is not found.We will load first map for you.")
-            self.map_file = "normal_map_1.json"
-            self.map = Map(path.join(map_folder, self.map_file))
+            self.map_file = path.join(MAP_FOLDER, "map_1.json")
+            # self.map_file = "normal_map_1.json"
+            self.map = Map(self.map_file)
 
     def _init_world(self, user_no: int):
         for i in range(user_no):
@@ -141,7 +143,7 @@ class MazeMode(GameMode):
         if self.frame >= self.game_end_time:
             for car in self.cars:
                 if car not in self.eliminated_user and car.is_running:
-                    car.end_frame = self.frame
+                    # car.end_frame = self.frame
                     self.eliminated_user.append(car)
                     car.is_running = False
                     car.status = "GAME_OVER"

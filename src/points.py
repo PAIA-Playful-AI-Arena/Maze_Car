@@ -1,4 +1,7 @@
+from functools import lru_cache
+
 import pygame
+
 from mlgame.game.paia_game import GameResultState, GameStatus
 from .env import *
 
@@ -21,10 +24,20 @@ class Point(pygame.sprite.Sprite):
         return asset_data
 
 
+def trnsfer_box2d_to_pygame(coordinate):
+    '''
+    :param coordinate: vertice of body of box2d object
+    :return: center of pygame rect
+    '''
+    return ((coordinate[0]) * PPM, (0 - coordinate[1]) * PPM)
+
+
 class End_point(Point):
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 3, TILESIZE * 3)
+        self.size = TILESIZE * 3
+        self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
+        self.rect.x, self.rect.y = trnsfer_box2d_to_pygame((self.x, self.y))
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
@@ -34,9 +47,15 @@ class End_point(Point):
         for hit in hits:
             if hit.is_running:
                 hit.end_frame = self.game.frame
+                hit.check_point += 1
+
                 hit.is_completed = True
                 self.game.eliminated_user.append(hit)  # TODO #外部注入
-                self.game.state = GameResultState.FINISH
+                if len(self.game.cars)==1:
+                    self.game.state = GameResultState.PASSED
+                else:
+                    self.game.state = GameResultState.FINISH
+
                 hit.is_running = False
                 hit.status = GameStatus.GAME_PASS
 
@@ -44,27 +63,39 @@ class End_point(Point):
         asset_data = {"type": "image",
                       "x": self.rect.x,
                       "y": self.rect.y,
-                      "width": 60,
-                      "height": 60,
+                      "width": self.size,
+                      "height": self.size,
                       "image_id": "endpoint",
                       "angle": 0}
         return asset_data
 
 
 class Check_point(Point):
+
     def __init__(self, game, coordinate):
         Point.__init__(self, game, coordinate)
-        self.rect = pygame.Rect(self.x, self.y, TILESIZE * 3, TILESIZE * 3)
+        self.size = TILESIZE * 3
+        self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
+        self.rect.x, self.rect.y = trnsfer_box2d_to_pygame((self.x, self.y))
+
         self.car_has_hit = []
+        self._touched = False
+        self._game = game
 
     def update(self, *args, **kwargs) -> None:
         self.detect_cars_collision()
 
     def detect_cars_collision(self):
         hits = pygame.sprite.spritecollide(self, self.game.cars, False)
+        if hits:
+            self._touched = True
+        else:
+            self._touched = False
+
         for hit in hits:
             if hit.status and hit not in self.car_has_hit:
                 hit.check_point += 1
+                hit.end_frame = self.game.frame
                 self.car_has_hit.append(hit)
 
     def get_progress_data(self):
@@ -78,11 +109,18 @@ class Check_point(Point):
         asset_data = {"type": "image",
                       "x": self.rect.x,
                       "y": self.rect.y,
-                      "width": 60,
-                      "height": 60,
-                      "image_id": "checkpoint",
+                      "width": self.size,
+                      "height": self.size,
+                      "image_id": self._image_id(self._touched),
                       "angle": 0}
         return asset_data
+
+    @lru_cache
+    def _image_id(self, touched: bool):
+        if touched:
+            return "checkpoint_2"
+        else:
+            return "checkpoint"
 
 
 class Outside_point(Point):

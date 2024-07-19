@@ -72,15 +72,7 @@ class GameMode(object):
         return self.running
 
     def rank(self)->list[Car]:
-        completed_game_user = []
-        unfinish_game_user = []
-        user_end_frame = []
-        user_check_point = []
-        for car in self.eliminated_user:
-            if car.is_completed:
-                # user_end_frame.append(car.end_frame)
-                # completed_game_user.append(car)
-                car.check_point = self.check_point_num
+
         sorted_cars = sorted(self.eliminated_user, key=lambda x: x.score, reverse=True)
 
         # Initialize rank and previous score
@@ -251,6 +243,7 @@ class GameMode(object):
                     elif tile == 7:
                         self.end_point = End_point(self,
                                                    (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
+                        self.check_point_num += 1
                     elif tile == 8:
                         Check_point(self, (col + (TILE_LEFTTOP[0] / TILESIZE), row + (TILE_LEFTTOP[1] / TILESIZE)))
                         self.check_point_num+=1
