@@ -4,33 +4,39 @@ from mlgame.game.paia_game import PaiaGame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
-    create_line_view_data, Scene, create_polygon_view_data, create_aapolygon_view_data
+    create_line_view_data, Scene, create_polygon_view_data, create_rect_view_data
 from .mazeMode import MazeMode
-from .moveMazeMode import MoveMazeMode
-from .practiceMode import PracticeMode
+from .points import Check_point
 from .sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
 
 class MazeCar(PaiaGame):
-    def __init__(self, user_num, game_type, map, time_to_play, sensor_num, sound, *args, **kwargs):
+    def __init__(self, user_num, map_num, time_to_play, sound, map_file=None, *args, **kwargs):
         super().__init__(user_num=user_num)
-        self.game_type = game_type
+        # self.game_type = game_type
         self.user_num = user_num
         self.is_single = False
         if self.user_num == 1:
             self.is_single = True
-        self.maze_id = map - 1
+        # self.maze_id = map_num - 1
         self.game_end_time = time_to_play
-        self.sensor_num = sensor_num
+        # self.sensor_num = sensor_num
+        self.sensor_num = 5
+
         self.is_sound = sound
-        self.set_game_mode()
+        if map_file is None:
+            map_file = path.join(MAP_FOLDER, f"map_{map_num}.json")
+        self.map_file = map_file
+        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num,
+                                  self.is_sound)
+
         self.game_mode.sound_controller.play_music()
         self.is_running = self.isRunning()
         self.map_width = self.game_mode.map.width
         self.map_height = self.game_mode.map.height
-        self.scene = Scene(WIDTH, HEIGHT, "#1E67D5")
+        self.scene = Scene(WIDTH, HEIGHT, BG_COLOR)
         self.origin_car_pos = [0, 0]
 
     # self.origin_car_pos = self.game_mode.car_info[0]["center"]
@@ -70,7 +76,8 @@ class MazeCar(PaiaGame):
 
     def reset(self):
         self.frame_count = 0
-        self.set_game_mode()
+        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num,
+                                  self.is_sound)
         self.game_mode.sound_controller.play_music()
 
     def isRunning(self):
@@ -102,39 +109,77 @@ class MazeCar(PaiaGame):
         info_path = path.join(ASSET_IMAGE_DIR, INFO_NAME)
         info_url = INFO_URL
         game_info["assets"].append(create_asset_init_data("info", 300, 700, info_path, info_url))
-        logo_path = path.join(ASSET_IMAGE_DIR, LOGO)
-        logo_url = LOGO_URL
-        game_info["assets"].append(create_asset_init_data("logo", 40, 40, logo_path, logo_url))
-        tmf_logo_path = path.join(ASSET_IMAGE_DIR, TMF_LOGO)
-        tmf_logo_url = TMF_LOGO_URL
-        game_info["assets"].append(create_asset_init_data("tmf_logo", 100, 40, tmf_logo_path, tmf_logo_url))
-        bg_path = path.join(ASSET_IMAGE_DIR, BG_IMG)
-        bg_url = BG_URL
-        game_info["assets"].append(create_asset_init_data("bg_img", 1000, 700, bg_path, bg_url))
+        game_info["assets"].append(create_asset_init_data("bg_img", 1000, 700, BG_PATH, BG_URL))
 
-        endpoint_path = path.join(ASSET_IMAGE_DIR, ENDPOINT_IMG)
-        checkpoint_path = path.join(ASSET_IMAGE_DIR, CHECKPOINT_IMG)
-
-        game_info["assets"].append(create_asset_init_data("endpoint", 60, 60, endpoint_path, ENDPOINT_URL))
-        game_info["assets"].append(create_asset_init_data("checkpoint", 60, 60, checkpoint_path, CHECKPOINT_URL))
+        game_info["assets"].append(create_asset_init_data("endpoint", 60, 60, ENDPOINT_PATH, ENDPOINT_URL))
+        game_info["assets"].append(create_asset_init_data("checkpoint", 60, 60, CHECKPOINT_PATH, CHECKPOINT_URL))
+        game_info["assets"].append(create_asset_init_data("checkpoint_2", 60, 60, CHECKPOINT2_PATH, CHECKPOINT_URL))
 
         for car in self.game_mode.car_info:
             file_path = path.join(ASSET_IMAGE_DIR, CARS_NAME[car["id"]])
             url = CARS_URL[car["id"]]
-            car_init_info = create_asset_init_data("car_0" + str(car["id"] + 1), 50, 50, file_path, url)
+            car_init_info = create_asset_init_data("car_0" + str(car["id"] + 1), 50, 40, file_path, url)
             game_info["assets"].append(car_init_info)
 
         for wall in self.game_mode.walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
-            game_info["background"].append(create_aapolygon_view_data("wall", vertices, "#FFFFFF"))
-            # game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
+            # game_info["background"].append(create_aapolygon_view_data("wall", vertices, "#FFFFFF"))
+            game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
+            # game_info["background"].append(
+            #     create_text_view_data(f"({vertices[0][0]},{vertices[0][1]})",
+            #                           vertices[0][0]-32, vertices[0][1], "#0000FF",
+            #                           "12px Arial BOLD"))
         for wall in self.game_mode.slant_walls:
             vertices = [(wall.body.transform * v) for v in wall.box.shape.vertices]
             vertices = [self.game_mode.trnsfer_box2d_to_pygame(v) for v in vertices]
             game_info["background"].append(create_polygon_view_data("wall", vertices, "#FFFFFF"))
 
+        # add coordinate p0 p1 p2 p3
+        p0 = (16,16)
+        p1 = (656,16)
+        p2 = (656,656)
+        p3 = (16,656)
 
+        game_info["background"].append(
+            create_text_view_data(f"(0,0)",
+                                  p0[0], p0[1] - 12, HELP_TXT_COLOR,
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P0",
+                                  p0[0], p0[1], 2, 2, HELP_TXT_COLOR))
+
+        game_info["background"].append(
+            create_text_view_data(f"(200,0)",
+                                  p1[0] - 16, p1[1] - 12, HELP_TXT_COLOR,
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P1",
+                                  p1[0], p1[1], 2, 2, HELP_TXT_COLOR))
+
+        game_info["background"].append(
+            create_text_view_data(f"(200,-200)",
+                                  p2[0] - 16, p2[1] + 12, HELP_TXT_COLOR,
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P2",
+                                  p2[0], p2[1], 2, 2, HELP_TXT_COLOR))
+
+        game_info["background"].append(
+            create_text_view_data(f"(0,-200)",
+                                  p3[0], p3[1] + 12, HELP_TXT_COLOR,
+                                  "12px Arial BOLD"))
+        game_info["background"].append(
+            create_rect_view_data(f"P3",
+                                  p3[0], p3[1], 2, 2, HELP_TXT_COLOR))
+
+        for p in self.game_mode.all_points:
+            point_data = p.get_progress_data()
+            game_info["background"].append(point_data)
+            game_info["background"].append(create_text_view_data(f"({p.get_info()['coordinate'][0]},{p.get_info()['coordinate'][1]})",
+                                                                 point_data['x'] - 12, point_data['y'] + 50,
+                                                                 HELP_TXT_COLOR,
+                                  "12px Arial BOLD"))
         return game_info
 
     @check_game_progress
@@ -158,10 +203,12 @@ class MazeCar(PaiaGame):
         #                                                                  240 - self.game_mode.car_info[0]["center"][1]]}
         # else:
         #     # 鏡頭固定在車子出生的位置
-    #     game_progress["game_sys_info"] = {"view_center_coordinate": [250 - self.origin_car_pos[0],
-    #                                                                  240 - self.origin_car_pos[1]]}
+        #     game_progress["game_sys_info"] = {"view_center_coordinate": [250 - self.origin_car_pos[0],
+        #                                                                  240 - self.origin_car_pos[1]]}
         for p in self.game_mode.all_points:
-            game_progress["object_list"].append(p.get_progress_data())
+            if isinstance(p,Check_point):
+                point_data = p.get_progress_data()
+                game_progress["object_list"].append(point_data)
 
 
         # end point
@@ -200,7 +247,7 @@ class MazeCar(PaiaGame):
                 game_progress["background"].append(
                     create_text_view_data(f"{'LF':<8}{car['l_sensor_value']['distance']:0>5.1f}cm",
                                           x,
-                                          y+16 + 130 * (car["id"]), "#FFFF00",
+                                          y + 16 + 130 * (car["id"]), "#FFFF00",
                                           "15px Arial BOLD")
                 )
                 game_progress["background"].append(
@@ -267,15 +314,26 @@ class MazeCar(PaiaGame):
                                           self.trnsfer_box2d_to_pygame(car["f_sensor_value"]["coordinate"])[1],
                                           "#FF0000", 3))
             else:
-                game_progress["toggle"].append(create_text_view_data("{0:05d} frames".format(car["end_frame"]),
-                                                                     x - 48, 178 + 30 + 105 * (car["id"] // 2),
+                game_progress["object_list"].append(create_text_view_data("{0:4d} frames".format(car["end_frame"]),
+                                                                     x,
+                                                                     y + 32 + 130 * (car["id"]),
                                                                      "#FFFFFF",
-                                                                     "16px Arial"))
+                                                                             "18px Arial BOLD"))
         for car in self.game_mode.car_info:
             game_progress["object_list"].append(
-                create_image_view_data("car_0" + str(car["id"] + 1), car["topleft"][0], car["topleft"][1], 50, 40,
+                create_image_view_data("car_0" + str(car["id"] + 1), car["topleft"][0], car["topleft"][1],
+                                       car['size'][0], car['size'][1],
                                        car["angle"])
             )
+            game_progress["toggle"].append(
+                create_text_view_data(f"({car['coordinate'][0]},{car['coordinate'][1]})",
+                car["topleft"][0]-30, car["topleft"][1]+30, "#FFFFFF",
+                                      "18px Arial BOLD"))
+            """
+            "x": car["coordinate"][0],
+            "y": car["coordinate"][1],
+            "angle": (car["angle"] * 180 / math.pi) % 360,
+            """
         return game_progress
 
     @check_game_result
@@ -286,7 +344,6 @@ class MazeCar(PaiaGame):
         scene_info = self.get_scene_info
         result = self.game_mode.result
         rank = []
-        # TODO refactor
         for user in self.game_mode.ranked_user:
             if self.game_mode.check_point_num:
 
@@ -319,8 +376,7 @@ class MazeCar(PaiaGame):
                 "remain_points": remain_point,
                 "pass_percent": pass_percent,
                 "remain_percent": remain_percent,
-                "score":user.score
-                # TODO score
+                "score": user.score
             }
             rank.append(same_rank)
 
@@ -380,20 +436,19 @@ class MazeCar(PaiaGame):
                 "5P": cmd_5P,
                 "6P": cmd_6P}
 
-    def set_game_mode(self):
-        if self.game_type == "MAZE":
-            self.game_mode = MazeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-                                      self.is_sound)
-            self.game_type = "MAZE"
-        elif self.game_type == "MOVE_MAZE":
-            self.game_mode = MoveMazeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-                                          self.is_sound)
-            self.game_type = "MOVE_MAZE"
-
-        elif self.game_type == "PRACTICE":
-            self.game_mode = PracticeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-                                          self.is_sound)
-            self.game_type = "PRACTICE"
+    # def set_game_mode(self):
+    #     if self.game_type == "MAZE":
+    #
+    #         self.game_type = "MAZE"
+    #     elif self.game_type == "MOVE_MAZE":
+    #         self.game_mode = MoveMazeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
+    #                                       self.is_sound)
+    #         self.game_type = "MOVE_MAZE"
+    #
+    #     elif self.game_type == "PRACTICE":
+    #         self.game_mode = PracticeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
+    #                                       self.is_sound)
+    #         self.game_type = "PRACTICE"
 
     def trnsfer_box2d_to_pygame(self, coordinate):
         '''
