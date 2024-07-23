@@ -29,14 +29,15 @@ FPS = 30
 BLACK = (0, 0, 0)
 WHITE = "#F5F5F5"
 RED = "#ff0000"
-YELLOW = (255, 255, 0)
+YELLOW = "#FFF500"
 GREEN = (0, 255, 0)
 GREY = (140, 140, 140)
-BLUE = (30, 60, 205)
+BLUE = "#0C55FF"
 LIGHT_BLUE = (33, 161, 241)
 BROWN = (199, 178, 153)
 PINK = (255, 105, 180)
 MEDIUMPURPLE = (147, 112, 219)
+WALL_COLOR = "#D9D9D9"
 
 '''object size'''
 car_size = (50, 40)
