@@ -245,7 +245,7 @@ class MazeCar(PaiaGame):
                                           "15px Arial BOLD")
                 )
                 game_progress["background"].append(
-                    create_text_view_data(f"{'LF':<8}{car['l_sensor_value']['distance']:0>5.1f}cm",
+                    create_text_view_data(f"{'LF':<8}{car['l_t_sensor_value']['distance']:0>5.1f}cm",
                                           x,
                                           y + 16 + 130 * (car["id"]), YELLOW,
                                           "15px Arial BOLD")
@@ -327,7 +327,7 @@ class MazeCar(PaiaGame):
             )
             game_progress["toggle"].append(
                 create_text_view_data(f"({car['coordinate'][0]},{car['coordinate'][1]})",
-                car["topleft"][0]-30, car["topleft"][1]+30, WHITE,
+                car["topleft"][0]-30, car["topleft"][1]+30, CAR_COLOR[car['id']],
                                       "18px Arial BOLD"))
             """
             "x": car["coordinate"][0],
