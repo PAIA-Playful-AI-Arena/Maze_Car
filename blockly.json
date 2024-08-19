@@ -6,9 +6,7 @@
         ["player1", "1P", "1P"],
         ["player2", "2P", "2P"],
         ["player3", "3P", "3P"],
-        ["player4", "4P", "4P"],
-        ["player5", "5P", "5P"],
-        ["player6", "6P", "6P"]
+        ["player4", "4P", "4P"]
     ],
       "GAME_STATUS": [
         ["GAME_ALIVE", "alive", "存活"],
@@ -30,10 +28,6 @@
         ["scene_info['L_T_sensor']", "left front sensor value", "左前超聲波值"]
     ],
     "CONSTANT": [
-        [0, "left boundary", "左邊界"],
-        [820, "right boundary", "右邊界"],
-        [0, "top boundary", "上邊界"],
-        [520, "bottom boundary", "下邊界"]
     ],
     "ACTION": [
         ["RESET", "RESET", "重置"]
