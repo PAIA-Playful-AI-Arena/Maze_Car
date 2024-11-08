@@ -16,7 +16,7 @@ from .points import Check_point
 
 
 class MazeCar(PaiaGame):
-    def __init__(self, user_num, map_num, time_to_play, sound, map_file=None, *args, **kwargs):
+    def __init__(self, user_num, map_num, time_to_play, map_file=None, *args, **kwargs):
         super().__init__(user_num=user_num)
         # self.game_type = game_type
         self.user_num = user_num
@@ -28,13 +28,10 @@ class MazeCar(PaiaGame):
         # self.sensor_num = sensor_num
         self.sensor_num = 5
 
-        self.is_sound = sound
         if map_file is None:
             map_file = path.join(MAP_FOLDER, f"map_{map_num}.json")
         self.map_file = map_file
-        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num,
-                                  self.is_sound)
-
+        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num)
         # self.game_mode.sound_controller.play_music()
         self.is_running = self.isRunning()
         self.map_width = self.game_mode.map.width
@@ -79,8 +76,7 @@ class MazeCar(PaiaGame):
 
     def reset(self):
         self.frame_count = 0
-        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num,
-                                  self.is_sound)
+        self.game_mode = MazeMode(self.user_num, self.map_file, self.game_end_time, self.sensor_num)
         # self.game_mode.sound_controller.play_music()
 
     def isRunning(self):
@@ -197,6 +193,7 @@ class MazeCar(PaiaGame):
         background = []
         object_list = []
         toggle = []
+        toggle_with_bias = []
 
         # if self.is_single:
         #     # 讓鏡頭跟著
@@ -262,7 +259,7 @@ class MazeCar(PaiaGame):
                                           y + 48 + 130 * (car["id"]), BLUE,
                                           "15px Arial BOLD")
                 )
-                background.append(
+                toggle_with_bias.append(
                     create_text_view_data(f"{'RF':<8}{car['r_t_sensor_value']['distance']:0>5.1f}cm",
                                           x,
                                           y + 64 + 130 * (car["id"]), BLUE,
@@ -308,7 +305,7 @@ class MazeCar(PaiaGame):
                                        car['size'][0], car['size'][1],
                                        car["angle"])
             )
-            toggle.append(
+            toggle_with_bias.append(
                 create_text_view_data(f"({car['coordinate'][0]},{car['coordinate'][1]})",
                                       car["topleft"][0] - 30, car["topleft"][1] + 30, CAR_COLOR[car['id']],
                                       "18px Arial BOLD"))
@@ -321,7 +318,9 @@ class MazeCar(PaiaGame):
             frame=self.frame_count,
             background=background,
             object_list=object_list,
-            foreground=[], toggle=toggle,
+            foreground=[],
+            toggle=toggle,
+            toggle_with_bias=toggle_with_bias,
             musics=[MusicProgressSchema(music_id=f"bgm").__dict__],
             sounds=[]
         )
@@ -331,6 +330,19 @@ class MazeCar(PaiaGame):
     def get_game_result(self):
         """
         Get the game result for the web
+
+        same_rank = {"玩家編號": str(user.car_no + 1) + "P",
+         "單局排名": self.game_mode.ranked_user.index(ranking) + 1,
+         "使用總幀數": user.end_frame,
+         "遊戲總幀數限制":self.game_end_time,
+         "使用時間百分比":round(user.end_frame/self.game_end_time,5)*100,
+         "檢查點總數量":self.game_mode.check_point_num,
+         "玩家通過檢查點數量": user.check_point,
+         "玩家未通過檢查點數量": remain_point,
+         "檢查點通過率": pass_percent,
+         "檢查點未通過率": remain_percent,
+        }
+
         """
         scene_info = self.get_scene_info
         result = self.game_mode.result
@@ -345,17 +357,7 @@ class MazeCar(PaiaGame):
                 pass_percent = 0
                 remain_point = 0
                 remain_percent = 0
-            # same_rank = {"玩家編號": str(user.car_no + 1) + "P",
-            #              "單局排名": self.game_mode.ranked_user.index(ranking) + 1,
-            #              "使用總幀數": user.end_frame,
-            #              "遊戲總幀數限制":self.game_end_time,
-            #              "使用時間百分比":round(user.end_frame/self.game_end_time,5)*100,
-            #              "檢查點總數量":self.game_mode.check_point_num,
-            #              "玩家通過檢查點數量": user.check_point,
-            #              "玩家未通過檢查點數量": remain_point,
-            #              "檢查點通過率": pass_percent,
-            #              "檢查點未通過率": remain_percent,
-            # }
+
             same_rank = {
                 "player_num": str(user.car_no + 1) + "P",
                 "rank": user.rank,
@@ -426,20 +428,6 @@ class MazeCar(PaiaGame):
                 "4P": cmd_4P,
                 "5P": cmd_5P,
                 "6P": cmd_6P}
-
-    # def set_game_mode(self):
-    #     if self.game_type == "MAZE":
-    #
-    #         self.game_type = "MAZE"
-    #     elif self.game_type == "MOVE_MAZE":
-    #         self.game_mode = MoveMazeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-    #                                       self.is_sound)
-    #         self.game_type = "MOVE_MAZE"
-    #
-    #     elif self.game_type == "PRACTICE":
-    #         self.game_mode = PracticeMode(self.user_num, self.maze_id + 1, self.game_end_time, self.sensor_num,
-    #                                       self.is_sound)
-    #         self.game_type = "PRACTICE"
 
     def trnsfer_box2d_to_pygame(self, coordinate):
         '''
