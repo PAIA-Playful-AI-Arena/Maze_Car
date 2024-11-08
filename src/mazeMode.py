@@ -8,7 +8,6 @@ from .env import *
 from .gameMode import GameMode
 from .maze_wall import Wall
 # from .points import End_point, Check_point, Outside_point
-from .sound_controller import SoundController
 from .tilemap import Map
 
 
@@ -46,7 +45,7 @@ class MazeMode(GameMode):
         self._init_world(user_num)
         self.new()
         '''sound'''
-        self.sound_controller = SoundController(sound_controller)
+        # self.sound_controller = SoundController(sound_controller)
 
     def new(self):
         # initialize all variables and do all setup for a new game

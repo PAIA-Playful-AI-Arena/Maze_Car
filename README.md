@@ -1,6 +1,6 @@
 # **Maze Car**
 
-<img src="./asset/logo.png" alt="logo" width="100"/>
+<img src="https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/refs/heads/main/asset/logo.png" alt="logo" width="100"/>
 
 ![Maze_Car](https://img.shields.io/github/v/tag/PAIA-Playful-AI-Arena/Maze_Car)
 [![Python 3.9](https://img.shields.io/badge/python->3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
@@ -202,8 +202,8 @@ python -m mlgame -i ml/ml_play_template.py ./ --map 1 --game_type MAZE --user_nu
     - `score`
       - `總分 = 檢查點個數x1000 - 花費時間`
 ---
-# 地圖製作說明
-[地圖製作教學](./map_editor.md)
 
+# 地圖製作說明
+[地圖製作教學](https://github.com/PAIA-Playful-AI-Arena/Maze_Car/blob/main/map_editor.md)
 
 ---
