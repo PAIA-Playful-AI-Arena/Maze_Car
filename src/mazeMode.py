@@ -46,7 +46,7 @@ class MazeMode(GameMode):
         self._init_world(user_num)
         self.new()
         '''sound'''
-        self.sound_controller = SoundController(sound_controller)
+        # self.sound_controller = SoundController(sound_controller)
 
     def new(self):
         # initialize all variables and do all setup for a new game

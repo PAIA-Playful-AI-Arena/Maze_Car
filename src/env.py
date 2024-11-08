@@ -92,3 +92,10 @@ MOVE_MAZE_MAPS = ["move_map_1.json", "move_map_2.json", "move_map_3.json", "move
 BG_COLOR = "#8493B1"
 MAP_FOLDER = path.join(path.dirname(__file__), "map")
 HELP_TXT_COLOR = "#0000FF"
+
+BGM_FILE_NAME = "BGM.mp3"
+MUSIC_PATH = path.join(path.dirname(__file__), "..", "asset", "music")
+MUSIC_URL = "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/maze_car/main/asset/music/"
+
+BGM_PATH = path.join(MUSIC_PATH, BGM_FILE_NAME)
+BGM_URL = MUSIC_URL+BGM_FILE_NAME
