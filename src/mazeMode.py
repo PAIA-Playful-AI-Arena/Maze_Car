@@ -8,7 +8,6 @@ from .env import *
 from .gameMode import GameMode
 from .maze_wall import Wall
 # from .points import End_point, Check_point, Outside_point
-from .sound_controller import SoundController
 from .tilemap import Map
 
 

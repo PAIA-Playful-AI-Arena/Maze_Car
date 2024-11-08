@@ -1,14 +1,16 @@
 import math
 
+import pygame
+
 from mlgame.game.paia_game import PaiaGame
 from mlgame.utils.enum import get_ai_name
 from mlgame.view.audio_model import create_music_init_data, MusicProgressSchema
 from mlgame.view.decorator import check_game_progress, check_game_result
 from mlgame.view.view_model import create_text_view_data, create_asset_init_data, create_image_view_data, \
     create_line_view_data, Scene, create_polygon_view_data, create_rect_view_data, create_scene_progress_data
+from .env import *
 from .mazeMode import MazeMode
 from .points import Check_point
-from .sound_controller import *
 
 '''need some fuction same as arkanoid which without dash in the name of fuction'''
 
@@ -102,14 +104,14 @@ class MazeCar(PaiaGame):
         """
         Get the scene and object information for drawing on the web
         """
-        game_info = {"scene": self.scene.__dict__,
-                     "background": [],
-                     "assets": []}
-        game_info["map_width"] = self.game_mode.map.tileWidth * 20
-        game_info["map_height"] = self.game_mode.map.tileHeight * 20
-        info_path = path.join(ASSET_IMAGE_DIR, INFO_NAME)
-        info_url = INFO_URL
-        game_info["assets"].append(create_asset_init_data("info", 300, 700, info_path, info_url))
+        game_info = {
+            "scene": self.scene.__dict__,
+            "background": [],
+            "assets": [],
+            "map_width": self.game_mode.map.tileWidth * 20,
+            "map_height": self.game_mode.map.tileHeight * 20
+        }
+        game_info["assets"].append(create_asset_init_data("info", 300, 700, INFO_PATH, INFO_URL))
         game_info["assets"].append(create_asset_init_data("bg_img", 1000, 700, BG_PATH, BG_URL))
 
         game_info["assets"].append(create_asset_init_data("endpoint", 60, 60, ENDPOINT_PATH, ENDPOINT_URL))
@@ -137,10 +139,10 @@ class MazeCar(PaiaGame):
             game_info["background"].append(create_polygon_view_data("wall", vertices, WALL_COLOR))
 
         # add coordinate p0 p1 p2 p3
-        p0 = (16,16)
-        p1 = (656,16)
-        p2 = (656,656)
-        p3 = (16,656)
+        p0 = (16, 16)
+        p1 = (656, 16)
+        p2 = (656, 656)
+        p3 = (16, 656)
 
         game_info["background"].append(
             create_text_view_data(f"(0,0)",
@@ -177,11 +179,12 @@ class MazeCar(PaiaGame):
         for p in self.game_mode.all_points:
             point_data = p.get_progress_data()
             game_info["background"].append(point_data)
-            game_info["background"].append(create_text_view_data(f"({p.get_info()['coordinate'][0]},{p.get_info()['coordinate'][1]})",
-                                                                 point_data['x'] - 12, point_data['y'] + 50,
-                                                                 HELP_TXT_COLOR,
-                                  "12px Arial BOLD"))
-        game_info["musics"]= [
+            game_info["background"].append(
+                create_text_view_data(f"({p.get_info()['coordinate'][0]},{p.get_info()['coordinate'][1]})",
+                                      point_data['x'] - 12, point_data['y'] + 50,
+                                      HELP_TXT_COLOR,
+                                      "12px Arial BOLD"))
+        game_info["musics"] = [
             create_music_init_data("bgm", file_path=BGM_PATH, github_raw_url=BGM_URL),
         ]
         return game_info
@@ -192,10 +195,8 @@ class MazeCar(PaiaGame):
         Get the position of game objects for drawing on the web
         """
         background = []
-        object_list =[]
+        object_list = []
         toggle = []
-        
-        
 
         # if self.is_single:
         #     # 讓鏡頭跟著
@@ -206,7 +207,7 @@ class MazeCar(PaiaGame):
         #     game_progress["game_sys_info"] = {"view_center_coordinate": [250 - self.origin_car_pos[0],
         #                                                                  240 - self.origin_car_pos[1]]}
         for p in self.game_mode.all_points:
-            if isinstance(p,Check_point):
+            if isinstance(p, Check_point):
                 point_data = p.get_progress_data()
                 object_list.append(point_data)
 
@@ -297,10 +298,10 @@ class MazeCar(PaiaGame):
                                           RED, 3))
             else:
                 object_list.append(create_text_view_data("{0:4d} frames".format(car["end_frame"]),
-                                                                     x,
-                                                                     y + 32 + 130 * (car["id"]),
-                                                                     WHITE,
-                                                                             "18px Arial BOLD"))
+                                                         x,
+                                                         y + 32 + 130 * (car["id"]),
+                                                         WHITE,
+                                                         "18px Arial BOLD"))
         for car in self.game_mode.car_info:
             object_list.append(
                 create_image_view_data("car_0" + str(car["id"] + 1), car["topleft"][0], car["topleft"][1],
@@ -309,7 +310,7 @@ class MazeCar(PaiaGame):
             )
             toggle.append(
                 create_text_view_data(f"({car['coordinate'][0]},{car['coordinate'][1]})",
-                car["topleft"][0]-30, car["topleft"][1]+30, CAR_COLOR[car['id']],
+                                      car["topleft"][0] - 30, car["topleft"][1] + 30, CAR_COLOR[car['id']],
                                       "18px Arial BOLD"))
             """
             "x": car["coordinate"][0],
@@ -321,10 +322,10 @@ class MazeCar(PaiaGame):
             background=background,
             object_list=object_list,
             foreground=[], toggle=toggle,
-            musics= [MusicProgressSchema(music_id=f"bgm").__dict__],
+            musics=[MusicProgressSchema(music_id=f"bgm").__dict__],
             sounds=[]
         )
-        return game_progress 
+        return game_progress
 
     @check_game_result
     def get_game_result(self):
