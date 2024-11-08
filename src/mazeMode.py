@@ -12,7 +12,7 @@ from .tilemap import Map
 
 
 class MazeMode(GameMode):
-    def __init__(self, user_num: int, map_file, time, sensor, sound_controller):
+    def __init__(self, user_num: int, map_file, time, sensor):
         super(MazeMode, self).__init__()
         '''load map data'''
         self.user_num = user_num
