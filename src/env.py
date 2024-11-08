@@ -1,5 +1,5 @@
 from os import path
-
+from .version import version
 PPM = 16  # pixels per meter
 TARGET_FPS = 60
 TIME_STEP = 1.0 / TARGET_FPS
@@ -53,34 +53,35 @@ SOUND_DIR = path.join(path.dirname(__file__), '../asset/sound')
 
 '''image'''
 BG_IMG = "bg_img.png"
-BG_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/bg_img.png'
+BG_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/bg_img.png'
 BG_PATH = path.join(ASSET_IMAGE_DIR, BG_IMG)
 INFO_NAME = "info.png"
-INFO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/info.png'
+INFO_PATH = path.join(ASSET_IMAGE_DIR, INFO_NAME)
+INFO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/info.png'
 
 LOGO = "logo.png"
-LOGO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/logo.png'
+LOGO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/logo.png'
 
 TMF_LOGO = "TMFlogo.png"
-TMF_LOGO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/TMFlogo.png'
+TMF_LOGO_URL = 'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/TMFlogo.png'
 ENDPOINT_IMG = "endpoint.png"
-ENDPOINT_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/{ENDPOINT_IMG}'
+ENDPOINT_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/{ENDPOINT_IMG}'
 ENDPOINT_PATH = path.join(ASSET_IMAGE_DIR, ENDPOINT_IMG)
 
 CHECKPOINT_IMG = "checkpoint.png"
-CHECKPOINT_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/{CHECKPOINT_IMG}'
+CHECKPOINT_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/{CHECKPOINT_IMG}'
 CHECKPOINT_PATH = path.join(ASSET_IMAGE_DIR, CHECKPOINT_IMG)
 CHECKPOINT2_IMG = "checkpoint_2.png"
-CHECKPOINT2_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/{CHECKPOINT2_IMG}'
+CHECKPOINT2_URL = f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/{CHECKPOINT2_IMG}'
 CHECKPOINT2_PATH = path.join(ASSET_IMAGE_DIR, CHECKPOINT2_IMG)
 
 CARS_NAME = ["car_01.png", "car_02.png", "car_03.png", "car_04.png", "car_05.png", "car_06.png", ]
-CARS_URL = ['https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_01.png',
-            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_02.png',
-            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_03.png',
-            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_04.png',
-            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_05.png',
-            'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/main/asset/image/car_06.png'
+CARS_URL = [f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/car_01.png',
+            f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/car_02.png',
+            f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/car_03.png',
+            f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/car_04.png',
+            f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/car_05.png',
+            f'https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/Maze_Car/{version}/asset/image/car_06.png'
             ]
 
 '''map_file'''
@@ -92,3 +93,10 @@ MOVE_MAZE_MAPS = ["move_map_1.json", "move_map_2.json", "move_map_3.json", "move
 BG_COLOR = "#8493B1"
 MAP_FOLDER = path.join(path.dirname(__file__), "map")
 HELP_TXT_COLOR = "#0000FF"
+
+BGM_FILE_NAME = "BGM.mp3"
+MUSIC_PATH = path.join(path.dirname(__file__), "..", "asset", "music")
+MUSIC_URL = f"https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/maze_car/{version}/asset/music/"
+
+BGM_PATH = path.join(MUSIC_PATH, BGM_FILE_NAME)
+BGM_URL = MUSIC_URL+BGM_FILE_NAME
