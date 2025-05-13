@@ -332,15 +332,15 @@ class MazeCar(PaiaGame):
         Get the game result for the web
 
         same_rank = {"玩家編號": str(user.car_no + 1) + "P",
-         "單局排名": self.game_mode.ranked_user.index(ranking) + 1,
-         "使用總幀數": user.end_frame,
-         "遊戲總幀數限制":self.game_end_time,
-         "使用時間百分比":round(user.end_frame/self.game_end_time,5)*100,
-         "檢查點總數量":self.game_mode.check_point_num,
-         "玩家通過檢查點數量": user.check_point,
-         "玩家未通過檢查點數量": remain_point,
-         "檢查點通過率": pass_percent,
-         "檢查點未通過率": remain_percent,
+        "單局排名": self.game_mode.ranked_user.index(ranking) + 1,
+        "使用總幀數": user.end_frame,
+        "遊戲總幀數限制":self.game_end_time,
+        "使用時間百分比":round(user.end_frame/self.game_end_time,5)*100,
+        "檢查點總數量":self.game_mode.check_point_num,
+        "玩家通過檢查點數量": user.check_point,
+        "玩家未通過檢查點數量": remain_point,
+        "檢查點通過率": pass_percent,
+        "檢查點未通過率": remain_percent,
         }
 
         """
