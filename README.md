@@ -95,7 +95,10 @@ game = MazeCar.MazeCar(user_num=1, map_num=4,map_file=None, time_to_play=200, so
 ## 使用ＡＩ玩遊戲
 
 ```bash
-python -m mlgame -i ml/ml_play_template.py ./ --map 1 --game_type MAZE --user_num 6 --time_to_play 450 --sensor_num 5 --sound off
+
+python -m mlgame -i  ml/ml_play_template.py ./ --map_num 1 --time_to_play 450
+
+python -m mlgame -i  ml/ml_play_template.py ./ --map_file ./src/map/map_1.json --time_to_play 450
 ```
 
 ## ＡＩ範例
