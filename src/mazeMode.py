@@ -37,7 +37,7 @@ class MazeMode(GameMode):
         self.eliminated_user = []
 
         self.game_end_time = time  # int, decide how many frames the game will end even some users don't finish game
-        pygame.font.init()
+        # pygame.font.init()
         self.state = GameResultState.UN_PASSED
         self.is_end = False
         self.sensor_num = sensor
